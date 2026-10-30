@@ -10,4 +10,6 @@ package com.upn.model;
  */
 public class Pedido {
     
+    private Long PedidoId;
+    
 }
