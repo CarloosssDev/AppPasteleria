@@ -1,68 +1,83 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.upn.model;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- *
- * @author user
- */
 @Entity
+@Table(name = "Productos")
 public class ProductoPasteleria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int stock;
+
+    @NotBlank(message = "El nombre del producto es obligatorio")
+    @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
+    @Column(nullable = false, length = 100)
     private String nombre;
-    private double PrecioBase;
+
+    @Min(value = 0, message = "El stock no puede ser negativo")
+    @Column(nullable = false)
+    private int stock;
+
+    @NotNull(message = "El precio base es obligatorio")
+    @DecimalMin(value = "0.01", message = "El precio base debe ser mayor a 0")
+    @Column(name = "precio_base", nullable = false)
+    private Double precioBase;
+
+    // Relación con Categoria
+    @NotNull(message = "Debe asignar una categoría al producto")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
+
+    // Relación Uno a Muchos con DetalleVenta
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DetalleVenta> detallesVenta = new ArrayList<>();
 
     public ProductoPasteleria() {
     }
 
-    public ProductoPasteleria(Long id, int stock, String nombre, double PrecioBase) {
+    public ProductoPasteleria(Long id, String nombre, int stock, Double precioBase, Categoria categoria) {
         this.id = id;
-        this.stock = stock;
         this.nombre = nombre;
-        this.PrecioBase = PrecioBase;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
         this.stock = stock;
+        this.precioBase = precioBase;
+        this.categoria = categoria;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
+    // Getters y Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public double getPrecioBase() {
-        return PrecioBase;
-    }
+    public int getStock() { return stock; }
+    public void setStock(int stock) { this.stock = stock; }
 
-    public void setPrecioBase(double PrecioBase) {
-        this.PrecioBase = PrecioBase;
-    }
+    public Double getPrecioBase() { return precioBase; }
+    public void setPrecioBase(Double precioBase) { this.precioBase = precioBase; }
 
+    public Categoria getCategoria() { return categoria; }
+    public void setCategoria(Categoria categoria) { this.categoria = categoria; }
+
+    public List<DetalleVenta> getDetallesVenta() { return detallesVenta; }
+    public void setDetallesVenta(List<DetalleVenta> detallesVenta) { this.detallesVenta = detallesVenta; }
 }
