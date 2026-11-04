@@ -4,14 +4,13 @@
  */
 package com.upn.model;
 
-import org.springframework.data.relational.core.mapping.Table;
+import jakarta.persistence.Entity;
 
 /**
  *
  * @author user
  */
 
-@Table
 public class Cliente {
     
 }

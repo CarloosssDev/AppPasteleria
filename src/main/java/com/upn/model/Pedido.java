@@ -4,6 +4,8 @@
  */
 package com.upn.model;
 
+import jakarta.persistence.Entity;
+
 /**
  *
  * @author user
