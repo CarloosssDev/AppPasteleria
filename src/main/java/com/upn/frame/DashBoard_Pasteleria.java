@@ -4,19 +4,47 @@
  */
 package com.upn.frame;
 
+import com.upn.model.Empleado;
+import java.beans.PropertyVetoException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 /**
  *
  * @author user
  */
+@Component
 public class DashBoard_Pasteleria extends javax.swing.JFrame {
-    
+
+    @Autowired
+    private org.springframework.context.ApplicationContext context;
+
+    private RegistrarVenta frameRegistrarVenta;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashBoard_Pasteleria.class.getName());
+    private Empleado empleadoLogueado;
 
     /**
      * Creates new form DashBoard_Pasteleria
      */
     public DashBoard_Pasteleria() {
         initComponents();
+        setExtendedState(MAXIMIZED_BOTH);
+    }
+
+    public void setEmpleadoLogueado(Empleado empleado) {
+        this.empleadoLogueado = empleado;
+
+        // Ejemplo opcional: Mostrar el nombre del empleado en el título de la ventana
+        if (empleado != null) {
+            this.setTitle("Dashboard Pastelería Briale - Usuario: "
+                    + empleado.mostrarNombreCompleto()
+                    + " [" + empleado.getRol() + "]");
+        }
+    }
+
+    public Empleado getEmpleadoLogueado() {
+        return empleadoLogueado;
     }
 
     /**
@@ -28,49 +56,41 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        dpPanel = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Dashboard Pasteleríia Briale");
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        getContentPane().add(dpPanel, java.awt.BorderLayout.CENTER);
 
-        jLabel1.setText("jLabel1");
+        jMenu1.setText("Ventas");
 
-        jLabel2.setText("jLabel2");
+        jMenuItem1.setText("Generar");
+        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
+        jMenu1.add(jMenuItem1);
 
-        jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
         jMenuBar1.add(jMenu2);
 
-        setJMenuBar(jMenuBar1);
+        jMenu3.setText("jMenu3");
+        jMenuBar1.add(jMenu3);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(529, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel1)
-                .addGap(28, 28, 28)
-                .addComponent(jLabel2)
-                .addContainerGap(376, Short.MAX_VALUE))
-        );
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        abrirVenta();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -98,10 +118,36 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JDesktopPane dpPanel;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
+
+    private void abrirVenta() {
+        // Si no está instanciada o si fue cerrada previamente por el usuario
+        if (frameRegistrarVenta == null || frameRegistrarVenta.isClosed()) {
+
+            // Pedimos la instancia a Spring (inyectará automáticamente sus Services/DAOs)
+            frameRegistrarVenta = context.getBean(RegistrarVenta.class);
+
+            // La agregamos al contenedor principal
+            dpPanel.add(frameRegistrarVenta);
+
+            try {
+                frameRegistrarVenta.setSelected(true);
+                frameRegistrarVenta.setMaximum(true); // Maximizar dentro del escritorio
+            } catch (PropertyVetoException e) {
+                frameRegistrarVenta.setSize(dpPanel.getSize());
+            }
+
+            frameRegistrarVenta.setVisible(true);
+        } else {
+            // Si ya estaba abierta, solo la traemos al frente
+            frameRegistrarVenta.toFront();
+        }
+    }
+
 }

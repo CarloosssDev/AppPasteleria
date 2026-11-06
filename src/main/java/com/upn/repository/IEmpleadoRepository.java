@@ -5,6 +5,7 @@
 package com.upn.repository;
 
 import com.upn.model.Empleado;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -12,5 +13,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author user
  */
 public interface IEmpleadoRepository extends JpaRepository<Empleado, Long> {
-
+    Optional<Empleado> findByDni(String dni);
 }

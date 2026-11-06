@@ -4,7 +4,12 @@
  */
 package com.upn.frame;
 
+import com.upn.model.Empleado;
+import com.upn.service.EmpleadoService;
 import java.awt.event.KeyEvent;
+import javax.swing.JOptionPane;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,7 +18,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Login_Pasteleria extends javax.swing.JFrame {
-    
+
+    @Autowired
+    private ApplicationContext context;
+
+    @Autowired
+    private EmpleadoService empleadoService;
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login_Pasteleria.class.getName());
 
     /**
@@ -54,7 +65,6 @@ public class Login_Pasteleria extends javax.swing.JFrame {
 
         jLabel2.setText("DNI");
 
-        txtDNI.addActionListener(this::txtDNIActionPerformed);
         txtDNI.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtDNIKeyPressed(evt);
@@ -65,14 +75,20 @@ public class Login_Pasteleria extends javax.swing.JFrame {
 
         jLabel5.setText("Contraseña");
 
-        txtPassword.addActionListener(this::txtPasswordActionPerformed);
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyPressed(evt);
+            }
+        });
 
         btnIngresar.setText("Ingresar");
         btnIngresar.addActionListener(this::btnIngresarActionPerformed);
 
         btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(this::btnLimpiarActionPerformed);
 
         btnSalir.setText("Salir");
+        btnSalir.addActionListener(this::btnSalirActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -133,26 +149,113 @@ public class Login_Pasteleria extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtDNIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDNIActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDNIActionPerformed
-
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        // TODO add your handling code here:
+
+        String dni = txtDNI.getText().trim();
+        String password = new String(txtPassword.getPassword()).trim();
+
+        // 1. Validar que los campos no estén vacíos
+        if (dni.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa el DNI.", "Campo requerido", JOptionPane.WARNING_MESSAGE);
+            txtDNI.requestFocus();
+            return;
+        }
+
+        if (password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa la contraseña.", "Campo requerido", JOptionPane.WARNING_MESSAGE);
+            txtPassword.requestFocus();
+            return;
+        }
+
+        // 2. Buscar al empleado en la base de datos a través de EmpleadoService
+        Empleado empleado = empleadoService.buscarEmpleado(dni);
+
+        if (empleado == null) {
+            JOptionPane.showMessageDialog(this, "El DNI ingresado no corresponde a ningún empleado registrado.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
+            txtDNI.selectAll();
+            txtDNI.requestFocus();
+            return;
+        }
+
+        // 3. Validar la contraseña
+        if (empleado.getPassword().equals(password)) {
+            JOptionPane.showMessageDialog(this,
+                    "¡Bienvenido(a) " + empleado.getNombre() + "!\nRol: " + empleado.getRol(),
+                    "Acceso Concedido",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            DashBoard_Pasteleria dash = context.getBean(DashBoard_Pasteleria.class);
+            dash.setEmpleadoLogueado(empleado);
+            dash.setVisible(true);
+
+            this.dispose(); // Cierras la ventana de Login
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Contraseña incorrecta.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
+            txtPassword.setText("");
+            txtPassword.requestFocus();
+        }
+
     }//GEN-LAST:event_btnIngresarActionPerformed
 
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordActionPerformed
-
     private void txtDNIKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDNIKeyPressed
-    
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-                
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            String dniIngresado = txtDNI.getText().trim();
+
+            if (dniIngresado.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Por favor, ingresa un número de DNI.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                lblNombre.setText("");
+                return;
+            }
+
+            // Buscar el empleado mediante la capa de servicio
+            Empleado empleado = empleadoService.buscarEmpleado(dniIngresado);
+
+            if (empleado != null) {
+                lblNombre.setText(empleado.mostrarNombreCompleto());
+                txtPassword.requestFocus();
+            } else {
+                lblNombre.setText("");
+                JOptionPane.showMessageDialog(this, "No se encontró ningún empleado registrado con el DNI: " + dniIngresado, "Empleado no encontrado", JOptionPane.ERROR_MESSAGE);
+                txtDNI.selectAll();
+                txtDNI.requestFocus();
+            }
         }
-        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDNIKeyPressed
+
+    private void txtPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyPressed
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+                String password = new String(txtPassword.getPassword()).trim();
+
+                if (!password.isEmpty()) {
+                    btnIngresarActionPerformed(null);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Por favor, ingresa tu contraseña.",
+                            "Advertencia",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        }
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_txtPasswordKeyPressed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        txtDNI.setText("");
+        txtPassword.setText("");
+        lblNombre.setText("");
+        txtDNI.requestFocus();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     /**
      * @param args the command line arguments
