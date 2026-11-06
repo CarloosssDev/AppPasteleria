@@ -6,7 +6,6 @@ package com.upn.service;
 
 import com.upn.model.Cliente;
 import com.upn.repository.IClienteRepository;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

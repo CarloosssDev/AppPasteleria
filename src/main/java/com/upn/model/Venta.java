@@ -106,7 +106,6 @@ public class Venta {
         calcularSaldo();
     }
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -129,7 +128,6 @@ public class Venta {
 
     public void setTotal(Double total) {
         this.total = total;
-        calcularSaldo();
     }
 
     public Double getAdelanto() {
@@ -138,11 +136,14 @@ public class Venta {
 
     public void setAdelanto(Double adelanto) {
         this.adelanto = adelanto;
-        calcularSaldo();
     }
 
     public Double getSaldo() {
         return saldo;
+    }
+
+    public void setSaldo(Double saldo) {
+        this.saldo = saldo;
     }
 
     public Cliente getCliente() {
@@ -168,4 +169,5 @@ public class Venta {
     public void setDetalles(List<DetalleVenta> detalles) {
         this.detalles = detalles;
     }
+
 }

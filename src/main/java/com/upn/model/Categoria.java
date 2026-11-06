@@ -82,4 +82,9 @@ public class Categoria {
     public void setProductos(List<ProductoPasteleria> productos) {
         this.productos = productos;
     }
+
+    @Override
+    public String toString() {
+        return this.nombre;
+    }
 }

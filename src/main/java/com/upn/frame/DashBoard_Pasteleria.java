@@ -35,7 +35,6 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
     public void setEmpleadoLogueado(Empleado empleado) {
         this.empleadoLogueado = empleado;
 
-        // Ejemplo opcional: Mostrar el nombre del empleado en el título de la ventana
         if (empleado != null) {
             this.setTitle("Dashboard Pastelería Briale - Usuario: "
                     + empleado.mostrarNombreCompleto()
@@ -76,10 +75,10 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Productos");
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("jMenu3");
+        jMenu3.setText("Categorias");
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -127,25 +126,21 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void abrirVenta() {
-        // Si no está instanciada o si fue cerrada previamente por el usuario
         if (frameRegistrarVenta == null || frameRegistrarVenta.isClosed()) {
-
-            // Pedimos la instancia a Spring (inyectará automáticamente sus Services/DAOs)
             frameRegistrarVenta = context.getBean(RegistrarVenta.class);
 
-            // La agregamos al contenedor principal
+            frameRegistrarVenta.setEmpleadoLogueado(empleadoLogueado);
             dpPanel.add(frameRegistrarVenta);
 
             try {
                 frameRegistrarVenta.setSelected(true);
-                frameRegistrarVenta.setMaximum(true); // Maximizar dentro del escritorio
+                frameRegistrarVenta.setMaximum(true);
             } catch (PropertyVetoException e) {
                 frameRegistrarVenta.setSize(dpPanel.getSize());
             }
 
             frameRegistrarVenta.setVisible(true);
         } else {
-            // Si ya estaba abierta, solo la traemos al frente
             frameRegistrarVenta.toFront();
         }
     }

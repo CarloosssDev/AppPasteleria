@@ -64,27 +64,52 @@ public class DetalleVenta {
         }
     }
 
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public int getCantidad() { return cantidad; }
-    public void setCantidad(int cantidad) { 
-        this.cantidad = cantidad; 
-        calcularSubtotal();
+    public Long getId() {
+        return id;
     }
 
-    public Double getPrecioUnitario() { return precioUnitario; }
-    public void setPrecioUnitario(Double precioUnitario) { 
-        this.precioUnitario = precioUnitario; 
-        calcularSubtotal();
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Double getSubtotal() { return subtotal; }
+    public int getCantidad() {
+        return cantidad;
+    }
 
-    public Venta getVenta() { return venta; }
-    public void setVenta(Venta venta) { this.venta = venta; }
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
 
-    public ProductoPasteleria getProducto() { return producto; }
-    public void setProducto(ProductoPasteleria producto) { this.producto = producto; }
+    public Double getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public void setPrecioUnitario(Double precioUnitario) {
+        this.precioUnitario = precioUnitario;
+    }
+
+    public Double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(Double subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public Venta getVenta() {
+        return venta;
+    }
+
+    public void setVenta(Venta venta) {
+        this.venta = venta;
+    }
+
+    public ProductoPasteleria getProducto() {
+        return producto;
+    }
+
+    public void setProducto(ProductoPasteleria producto) {
+        this.producto = producto;
+    }
+
 }
