@@ -41,6 +41,9 @@ public class ProductoPasteleria {
     @Column(name = "precio_base", nullable = false)
     private Double precioBase;
 
+    @Column(name = "estado", nullable = false)
+    private boolean estado = true;
+
     // Relación con Categoria
     @NotNull(message = "Debe asignar una categoría al producto")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -62,22 +65,60 @@ public class ProductoPasteleria {
         this.categoria = categoria;
     }
 
-    // Getters y Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public int getStock() { return stock; }
-    public void setStock(int stock) { this.stock = stock; }
+    public String getNombre() {
+        return nombre;
+    }
 
-    public Double getPrecioBase() { return precioBase; }
-    public void setPrecioBase(Double precioBase) { this.precioBase = precioBase; }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public Categoria getCategoria() { return categoria; }
-    public void setCategoria(Categoria categoria) { this.categoria = categoria; }
+    public int getStock() {
+        return stock;
+    }
 
-    public List<DetalleVenta> getDetallesVenta() { return detallesVenta; }
-    public void setDetallesVenta(List<DetalleVenta> detallesVenta) { this.detallesVenta = detallesVenta; }
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public Double getPrecioBase() {
+        return precioBase;
+    }
+
+    public void setPrecioBase(Double precioBase) {
+        this.precioBase = precioBase;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public List<DetalleVenta> getDetallesVenta() {
+        return detallesVenta;
+    }
+
+    public void setDetallesVenta(List<DetalleVenta> detallesVenta) {
+        this.detallesVenta = detallesVenta;
+    }
+
 }

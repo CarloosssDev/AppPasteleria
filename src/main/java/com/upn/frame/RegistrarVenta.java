@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-
 @Scope("prototype")
 public class RegistrarVenta extends javax.swing.JInternalFrame {
 
@@ -53,6 +52,15 @@ public class RegistrarVenta extends javax.swing.JInternalFrame {
 
     @PostConstruct
     public void init() {
+        tblProductos.getColumnModel().getColumn(0).setPreferredWidth(60);
+        tblProductos.getColumnModel().getColumn(1).setPreferredWidth(250);
+        tblProductos.getColumnModel().getColumn(2).setPreferredWidth(90);
+        tblProductos.getColumnModel().getColumn(3).setPreferredWidth(70);
+
+        tblCarrito.getColumnModel().getColumn(0).setPreferredWidth(100);
+        tblCarrito.getColumnModel().getColumn(1).setPreferredWidth(250);
+        tblCarrito.getColumnModel().getColumn(2).setPreferredWidth(90);
+        tblCarrito.getColumnModel().getColumn(3).setPreferredWidth(70);
         cargarCategorias();
         cargarTodosLosProductos();
     }
@@ -108,7 +116,7 @@ public class RegistrarVenta extends javax.swing.JInternalFrame {
         btnCancelar = new javax.swing.JButton();
 
         setClosable(true);
-        setResizable(true);
+        setTitle("Registrar Venta");
 
         pnlContenedorPrincipal.setLayout(new java.awt.BorderLayout());
 
@@ -215,7 +223,15 @@ public class RegistrarVenta extends javax.swing.JInternalFrame {
                 "ID", "Poducto", "Precio", "Stock"
             }
         ));
+        tblProductos.getTableHeader().setResizingAllowed(false);
+        tblProductos.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblProductos);
+        if (tblProductos.getColumnModel().getColumnCount() > 0) {
+            tblProductos.getColumnModel().getColumn(0).setPreferredWidth(50);
+            tblProductos.getColumnModel().getColumn(1).setPreferredWidth(250);
+            tblProductos.getColumnModel().getColumn(2).setPreferredWidth(90);
+            tblProductos.getColumnModel().getColumn(3).setPreferredWidth(70);
+        }
 
         pnlProductos.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -270,7 +286,15 @@ public class RegistrarVenta extends javax.swing.JInternalFrame {
                 "Cantidad", "Descripción", "Precio Unitario", "Subtotal"
             }
         ));
+        tblCarrito.getTableHeader().setResizingAllowed(false);
+        tblCarrito.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tblCarrito);
+        if (tblCarrito.getColumnModel().getColumnCount() > 0) {
+            tblCarrito.getColumnModel().getColumn(0).setPreferredWidth(100);
+            tblCarrito.getColumnModel().getColumn(1).setPreferredWidth(250);
+            tblCarrito.getColumnModel().getColumn(2).setMinWidth(90);
+            tblCarrito.getColumnModel().getColumn(3).setPreferredWidth(100);
+        }
 
         pnlCarrito.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
@@ -490,12 +514,7 @@ public class RegistrarVenta extends javax.swing.JInternalFrame {
 
         if (seleccionado instanceof Categoria) {
             Categoria cat = (Categoria) seleccionado;
-
-            if (cat.getId() == 0L || cat.getId() == null) {
-                cargarTodosLosProductos();
-            } else {
-                cargarProductosPorCategoriaId(cat.getId());
-            }
+            cargarProductosPorCategoriaId(cat.getId());
         }
 
     }// GEN-LAST:event_cboCategoriasActionPerformed
@@ -710,7 +729,7 @@ public class RegistrarVenta extends javax.swing.JInternalFrame {
 
     private void cargarTodosLosProductos() {
         try {
-            List<ProductoPasteleria> lista = productoService.listarTodos();
+            List<ProductoPasteleria> lista = productoService.listarActivos();
             llenarTablaProductos(lista);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al cargar productos: " + e.getMessage());

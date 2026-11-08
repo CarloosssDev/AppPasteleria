@@ -6,7 +6,9 @@ package com.upn.frame;
 
 import com.upn.model.Empleado;
 import java.beans.PropertyVetoException;
+import javax.swing.JInternalFrame;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,9 +19,9 @@ import org.springframework.stereotype.Component;
 public class DashBoard_Pasteleria extends javax.swing.JFrame {
 
     @Autowired
-    private org.springframework.context.ApplicationContext context;
+    private ApplicationContext context;
 
-    private RegistrarVenta frameRegistrarVenta;
+    private RegistrarVenta frameVenta;
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashBoard_Pasteleria.class.getName());
     private Empleado empleadoLogueado;
@@ -55,41 +57,61 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu4 = new javax.swing.JMenu();
+        jMenu5 = new javax.swing.JMenu();
         dpPanel = new javax.swing.JDesktopPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        menuBarPasteleria = new javax.swing.JMenuBar();
+        mnVentas = new javax.swing.JMenu();
+        miGenerarVentas = new javax.swing.JMenuItem();
+        mnProductos = new javax.swing.JMenu();
+        miMantenimientoProductos = new javax.swing.JMenuItem();
+        mnCategorias = new javax.swing.JMenu();
+
+        jMenu4.setText("File");
+        jMenuBar2.add(jMenu4);
+
+        jMenu5.setText("Edit");
+        jMenuBar2.add(jMenu5);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Dashboard Pasteleríia Briale");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         getContentPane().add(dpPanel, java.awt.BorderLayout.CENTER);
 
-        jMenu1.setText("Ventas");
+        mnVentas.setText("Ventas");
 
-        jMenuItem1.setText("Generar");
-        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
-        jMenu1.add(jMenuItem1);
+        miGenerarVentas.setText("Generar");
+        miGenerarVentas.addActionListener(this::miGenerarVentasActionPerformed);
+        mnVentas.add(miGenerarVentas);
 
-        jMenuBar1.add(jMenu1);
+        menuBarPasteleria.add(mnVentas);
 
-        jMenu2.setText("Productos");
-        jMenuBar1.add(jMenu2);
+        mnProductos.setText("Productos");
 
-        jMenu3.setText("Categorias");
-        jMenuBar1.add(jMenu3);
+        miMantenimientoProductos.setText("Mantenimiento");
+        miMantenimientoProductos.addActionListener(this::miMantenimientoProductosActionPerformed);
+        mnProductos.add(miMantenimientoProductos);
 
-        setJMenuBar(jMenuBar1);
+        menuBarPasteleria.add(mnProductos);
+
+        mnCategorias.setText("Categorias");
+        menuBarPasteleria.add(mnCategorias);
+
+        setJMenuBar(menuBarPasteleria);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void miGenerarVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miGenerarVentasActionPerformed
         abrirVenta();
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_miGenerarVentasActionPerformed
+
+    private void miMantenimientoProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMantenimientoProductosActionPerformed
+
+        abrirProductos();
+    }//GEN-LAST:event_miMantenimientoProductosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -118,31 +140,62 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane dpPanel;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuBar menuBarPasteleria;
+    private javax.swing.JMenuItem miGenerarVentas;
+    private javax.swing.JMenuItem miMantenimientoProductos;
+    private javax.swing.JMenu mnCategorias;
+    private javax.swing.JMenu mnProductos;
+    private javax.swing.JMenu mnVentas;
     // End of variables declaration//GEN-END:variables
 
     private void abrirVenta() {
-        if (frameRegistrarVenta == null || frameRegistrarVenta.isClosed()) {
-            frameRegistrarVenta = context.getBean(RegistrarVenta.class);
+        frameVenta = abrirInternalFrame(RegistrarVenta.class, true);
+        frameVenta.setEmpleadoLogueado(empleadoLogueado);
+    }
 
-            frameRegistrarVenta.setEmpleadoLogueado(empleadoLogueado);
-            dpPanel.add(frameRegistrarVenta);
+    private void abrirProductos() {
+        abrirInternalFrame(GestionarProductos.class, true);
 
-            try {
-                frameRegistrarVenta.setSelected(true);
-                frameRegistrarVenta.setMaximum(true);
-            } catch (PropertyVetoException e) {
-                frameRegistrarVenta.setSize(dpPanel.getSize());
+    }
+
+    private <T extends JInternalFrame> T abrirInternalFrame(Class<T> claseFrame, boolean maximizar) {
+        for (JInternalFrame frame : dpPanel.getAllFrames()) {
+            if (claseFrame.isInstance(frame)) {
+                try {
+                    frame.setSelected(true);
+                    frame.toFront();
+                } catch (PropertyVetoException ignored) {
+                }
+                return (T) frame;
             }
-
-            frameRegistrarVenta.setVisible(true);
-        } else {
-            frameRegistrarVenta.toFront();
         }
+        for (JInternalFrame frame : dpPanel.getAllFrames()) {
+            frame.dispose();
+        }
+        T nuevoFrame = context.getBean(claseFrame);
+        dpPanel.add(nuevoFrame);
+
+        nuevoFrame.setVisible(true);
+
+        try {
+            nuevoFrame.setSelected(true);
+            if (maximizar) {
+                nuevoFrame.setMaximum(true);
+            } else {
+                nuevoFrame.pack();
+                int x = (dpPanel.getWidth() - nuevoFrame.getWidth()) / 2;
+                int y = (dpPanel.getHeight() - nuevoFrame.getHeight()) / 2;
+                nuevoFrame.setLocation(x, y);
+            }
+        } catch (PropertyVetoException e) {
+            if (maximizar) {
+                nuevoFrame.setSize(dpPanel.getSize());
+            }
+        }
+        return nuevoFrame;
     }
 
 }
