@@ -334,21 +334,7 @@ public class GestionarProductos extends JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cboEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboEstadoActionPerformed
-        int index = cboEstado.getSelectedIndex();
-        switch (index) {
-            case 0: {
-                cargarTodosLosProductos();
-                break;
-            }
-            case 1: {
-                cargarProductosPorEstado(true);
-                break;
-            }
-            case 2: {
-                cargarProductosPorEstado(false);
-                break;
-            }
-        }
+        aplicarFiltrosCombinados();
     }//GEN-LAST:event_cboEstadoActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnNuevoActionPerformed
@@ -439,22 +425,11 @@ public class GestionarProductos extends JInternalFrame {
     }
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_txtBuscarKeyReleased
-        String textoBusqueda = txtBuscar.getText().trim();
-
-        if (textoBusqueda.isEmpty()) {
-            cargarTodosLosProductos();
-        } else {
-            cargarProductosPorNombre(textoBusqueda);
-        }
+        aplicarFiltrosCombinados();
     }// GEN-LAST:event_txtBuscarKeyReleased
 
     private void cboCategoriasFiltrarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cboCategoriasFiltrarActionPerformed
-        Object seleccionado = cboCategoriasFiltrar.getSelectedItem();
-
-        if (seleccionado instanceof Categoria) {
-            Categoria cat = (Categoria) seleccionado;
-            cargarProductosPorCategoriaId(cat.getId());
-        }
+        aplicarFiltrosCombinados();
     }// GEN-LAST:event_cboCategoriasFiltrarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnEditarActionPerformed
@@ -493,7 +468,7 @@ public class GestionarProductos extends JInternalFrame {
                 productoService.guardar(producto);
 
                 JOptionPane.showMessageDialog(this, "Producto desactivado correctamente.");
-                cargarProductosPorEstado(true);
+                cargarTodosLosProductos();
                 estadoInicialFormulario();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error al desactivar el producto: " + e.getMessage(), "Error",
@@ -577,40 +552,31 @@ public class GestionarProductos extends JInternalFrame {
         }
     }
 
-    private void cargarProductosPorEstado(boolean estado) {
+    private void aplicarFiltrosCombinados() {
         try {
-            List<ProductoPasteleria> lista;
-            if (estado) {
-                lista = productoService.listarActivos();
-            } else {
-                lista = productoService.listarInactivos();
-                if (lista.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "No existen productos inactivos por el momento!.",
-                            "Advertencia", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+            Long idCategoria = 0L;
+            Object itemCat = cboCategoriasFiltrar.getSelectedItem();
+            if (itemCat instanceof Categoria) {
+                idCategoria = ((Categoria) itemCat).getId();
             }
-            llenarTablaProductos(lista);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al filtrar productos: " + e.getMessage());
-        }
-    }
 
-    private void cargarProductosPorNombre(String nombre) {
-        try {
-            List<ProductoPasteleria> lista = productoService.buscarPorNombre(nombre);
-            llenarTablaProductos(lista);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al buscar productos: " + e.getMessage());
-        }
-    }
+            Boolean estado = null;
+            int indexEstado = cboEstado.getSelectedIndex();
+            if (indexEstado == 1) {
+                estado = true;
+            } else if (indexEstado == 2) {
+                estado = false;
+            }
 
-    private void cargarProductosPorCategoriaId(Long idCategoria) {
-        try {
-            List<ProductoPasteleria> lista = productoService.listarPorCategoria(idCategoria);
+            String textoBusqueda = txtBuscar.getText().trim();
+
+            List<ProductoPasteleria> lista = productoService.filtrarProductosCombinados(idCategoria, estado, textoBusqueda);
+
             llenarTablaProductos(lista);
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al filtrar productos: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al filtrar productos: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

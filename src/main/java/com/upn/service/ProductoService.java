@@ -33,6 +33,10 @@ public class ProductoService {
         return productoRepository.findByCategoriaIdWithCategoria(idCategoria);
     }
 
+    public List<ProductoPasteleria> filtrarProductosCombinados(Long idCategoria, Boolean estado, String nombre) {
+        return productoRepository.filtrarProductosCombinados(idCategoria, estado, nombre != null ? nombre.trim() : "");
+    }
+
     public List<ProductoPasteleria> buscarPorNombre(String nombre) {
         return productoRepository.findByNombreContainingIgnoreCaseWithCategoria(nombre);
     }

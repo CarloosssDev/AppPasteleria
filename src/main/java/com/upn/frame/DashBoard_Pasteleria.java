@@ -105,7 +105,6 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
 
     private void miGenerarVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miGenerarVentasActionPerformed
         abrirVenta();
-        // TODO add your handling code here:
     }//GEN-LAST:event_miGenerarVentasActionPerformed
 
     private void miMantenimientoProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMantenimientoProductosActionPerformed

@@ -496,13 +496,7 @@ public class RegistrarVenta extends javax.swing.JInternalFrame {
     }// GEN-LAST:event_txtAdelantoKeyReleased
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_txtBuscarKeyReleased
-        String textoBusqueda = txtBuscar.getText().trim();
-
-        if (textoBusqueda.isEmpty()) {
-            cargarTodosLosProductos();
-        } else {
-            cargarProductosPorNombre(textoBusqueda);
-        }
+        aplicarFiltrosCombinados();
     }// GEN-LAST:event_txtBuscarKeyReleased
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnAgregarActionPerformed
@@ -510,13 +504,7 @@ public class RegistrarVenta extends javax.swing.JInternalFrame {
     }// GEN-LAST:event_btnAgregarActionPerformed
 
     private void cboCategoriasActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_cboCategoriasActionPerformed
-        Object seleccionado = cboCategorias.getSelectedItem();
-
-        if (seleccionado instanceof Categoria) {
-            Categoria cat = (Categoria) seleccionado;
-            cargarProductosPorCategoriaId(cat.getId());
-        }
-
+        aplicarFiltrosCombinados();
     }// GEN-LAST:event_cboCategoriasActionPerformed
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnBuscarClienteActionPerformed
@@ -736,21 +724,28 @@ public class RegistrarVenta extends javax.swing.JInternalFrame {
         }
     }
 
-    private void cargarProductosPorNombre(String nombre) {
+    private void aplicarFiltrosCombinados() {
         try {
-            List<ProductoPasteleria> lista = productoService.buscarPorNombre(nombre);
-            llenarTablaProductos(lista);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al buscar productos: " + e.getMessage());
-        }
-    }
+            Long idCategoria = 0L;
+            Object itemCat = cboCategorias.getSelectedItem();
+            if (itemCat instanceof Categoria) {
+                idCategoria = ((Categoria) itemCat).getId();
+            }
 
-    private void cargarProductosPorCategoriaId(Long idCategoria) {
-        try {
             List<ProductoPasteleria> lista = productoService.listarPorCategoria(idCategoria);
+
+            String textoBusqueda = txtBuscar.getText().trim().toLowerCase();
+            if (!textoBusqueda.isEmpty()) {
+                lista = lista.stream()
+                        .filter(p -> p.getNombre().toLowerCase().contains(textoBusqueda))
+                        .toList();
+            }
+
             llenarTablaProductos(lista);
+
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al filtrar productos: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al filtrar el catálogo: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
