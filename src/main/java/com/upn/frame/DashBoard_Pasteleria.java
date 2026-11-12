@@ -64,6 +64,7 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
         menuBarPasteleria = new javax.swing.JMenuBar();
         mnVentas = new javax.swing.JMenu();
         miGenerarVentas = new javax.swing.JMenuItem();
+        mniReporteVentas = new javax.swing.JMenuItem();
         mnProductos = new javax.swing.JMenu();
         miMantenimientoProductos = new javax.swing.JMenuItem();
         mnCategorias = new javax.swing.JMenu();
@@ -84,6 +85,10 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
         miGenerarVentas.setText("Generar");
         miGenerarVentas.addActionListener(this::miGenerarVentasActionPerformed);
         mnVentas.add(miGenerarVentas);
+
+        mniReporteVentas.setText("Reportes");
+        mniReporteVentas.addActionListener(this::mniReporteVentasActionPerformed);
+        mnVentas.add(mniReporteVentas);
 
         menuBarPasteleria.add(mnVentas);
 
@@ -108,9 +113,12 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
     }//GEN-LAST:event_miGenerarVentasActionPerformed
 
     private void miMantenimientoProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMantenimientoProductosActionPerformed
-
         abrirProductos();
     }//GEN-LAST:event_miMantenimientoProductosActionPerformed
+
+    private void mniReporteVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mniReporteVentasActionPerformed
+        abrirInternalFrame(ConsultarVentas.class, true);
+    }//GEN-LAST:event_mniReporteVentasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -148,6 +156,7 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
     private javax.swing.JMenu mnCategorias;
     private javax.swing.JMenu mnProductos;
     private javax.swing.JMenu mnVentas;
+    private javax.swing.JMenuItem mniReporteVentas;
     // End of variables declaration//GEN-END:variables
 
     private void abrirVenta() {
@@ -157,7 +166,6 @@ public class DashBoard_Pasteleria extends javax.swing.JFrame {
 
     private void abrirProductos() {
         abrirInternalFrame(GestionarProductos.class, true);
-
     }
 
     private <T extends JInternalFrame> T abrirInternalFrame(Class<T> claseFrame, boolean maximizar) {

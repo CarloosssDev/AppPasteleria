@@ -13,17 +13,21 @@ import com.upn.model.Venta;
 import com.upn.repository.IProductoRepository;
 import com.upn.repository.IVentaRepository;
 
-import jakarta.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class VentaService {
+
     @Autowired
     private IVentaRepository repository;
 
     @Autowired
     private IProductoRepository productoRepository;
 
-    @Transactional 
+    @Transactional
     public Venta procesarVenta(Cliente cliente, Empleado empleado, List<DetalleVenta> detalles, Double total, Double adelanto,
             Double saldo) {
         Venta venta = new Venta();
@@ -46,6 +50,18 @@ public class VentaService {
         }
 
         return repository.save(venta);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Venta> buscarVentasPorFecha(LocalDate fechaInicio, LocalDate fechaFin) {
+        LocalDateTime inicio = fechaInicio.atStartOfDay();
+        LocalDateTime fin = fechaFin.atTime(LocalTime.MAX);
+        return repository.findByFechaBetweenWithDetails(inicio, fin);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Venta> listarTodas() {
+        return  repository.findAllWithDetails();
     }
 
 }

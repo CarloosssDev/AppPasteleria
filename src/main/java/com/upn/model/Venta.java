@@ -29,7 +29,7 @@ public class Venta {
 
     @NotNull(message = "La fecha de la venta es obligatoria")
     @Column(name = "fecha_venta", nullable = false, updatable = false)
-    private LocalDateTime fechaVenta = LocalDateTime.now();
+    private LocalDateTime fecha = LocalDateTime.now();
 
     @NotNull(message = "El monto total es obligatorio")
     @DecimalMin(value = "0.0", message = "El total no puede ser negativo")
@@ -61,7 +61,7 @@ public class Venta {
     private List<DetalleVenta> detalles = new ArrayList<>();
 
     public Venta() {
-        this.fechaVenta = LocalDateTime.now();
+        this.fecha = LocalDateTime.now();
         this.total = 0.0;
         this.adelanto = 0.0;
         this.saldo = 0.0;
@@ -69,7 +69,7 @@ public class Venta {
 
     public Venta(Long id, LocalDateTime fechaVenta, Double total, Double adelanto, Cliente cliente, Empleado empleado) {
         this.id = id;
-        this.fechaVenta = fechaVenta != null ? fechaVenta : LocalDateTime.now();
+        this.fecha = fechaVenta != null ? fechaVenta : LocalDateTime.now();
         this.total = total;
         this.adelanto = adelanto;
         this.cliente = cliente;
@@ -114,12 +114,12 @@ public class Venta {
         this.id = id;
     }
 
-    public LocalDateTime getFechaVenta() {
-        return fechaVenta;
+    public LocalDateTime getFecha() {
+        return fecha;
     }
 
-    public void setFechaVenta(LocalDateTime fechaVenta) {
-        this.fechaVenta = fechaVenta;
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 
     public Double getTotal() {

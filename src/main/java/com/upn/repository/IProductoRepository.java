@@ -23,7 +23,7 @@ public interface IProductoRepository extends JpaRepository<ProductoPasteleria, L
     @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE p.estado = true AND LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
     List<ProductoPasteleria> findByNombreContainingIgnoreCaseWithCategoria(@Param("nombre") String nombre);
 
-    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE (:idCategoria = 0 OR p.categoria.id = :idCategoria)")
+    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE p.estado = true AND (:idCategoria = 0 OR p.categoria.id = :idCategoria)")
     List<ProductoPasteleria> findByCategoriaIdWithCategoria(@Param("idCategoria") Long idCategoria);
 
     @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria c "

@@ -834,6 +834,7 @@ public class RegistrarVenta extends javax.swing.JInternalFrame {
 
     private void limpiarFormularioVenta() {
         txtDniCliente.setText("");
+        txtBuscar.setText("");
         lblNombreCliente.setText("Cliente: [No Seleccionado]");
         lblNombreCliente.setForeground(Color.BLUE);
         this.clienteSeleccionado = null;
@@ -844,7 +845,11 @@ public class RegistrarVenta extends javax.swing.JInternalFrame {
         txtAdelanto.setText("0.00");
         lblSaldo.setText("S/ 0.00");
 
-        cargarTodosLosProductos();
+        if (cboCategorias.getItemCount() > 0) {
+            cboCategorias.setSelectedIndex(0);
+        }
+
+        aplicarFiltrosCombinados();
     }
 
     public Empleado getEmpleadoLogueado() {

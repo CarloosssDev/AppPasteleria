@@ -2,7 +2,7 @@ package com.upn.service;
 
 import com.upn.model.ProductoPasteleria;
 import com.upn.repository.IProductoRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +14,17 @@ public class ProductoService {
     @Autowired
     private IProductoRepository productoRepository;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductoPasteleria> listarTodos() {
         return productoRepository.findAllWithCategoria();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductoPasteleria> listarActivos() {
         return productoRepository.findAllActivosWithCategoria();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ProductoPasteleria> listarInactivos() {
         return productoRepository.findAllInactivosWithCategoria();
     }
