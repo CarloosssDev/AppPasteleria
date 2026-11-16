@@ -8,12 +8,14 @@ import com.upn.model.Categoria;
 import com.upn.model.ProductoPasteleria;
 import com.upn.service.CategoriaService;
 import com.upn.service.ProductoService;
+import com.upn.util.EstiloBriale;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.kordamp.ikonli.feather.Feather;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -41,6 +43,7 @@ public class GestionarProductos extends JInternalFrame {
     public GestionarProductos() {
         initComponents();
         configurarTablaProductos();
+        aplicarDisenoProductos();
     }
 
     @PostConstruct
@@ -78,6 +81,7 @@ public class GestionarProductos extends JInternalFrame {
         cboCategoriasFiltrar = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         cboEstado = new javax.swing.JComboBox<>();
+        lblBuscarProducto = new javax.swing.JLabel();
         splitProductos = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProductos = new javax.swing.JTable();
@@ -87,13 +91,14 @@ public class GestionarProductos extends JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         spnStock = new javax.swing.JSpinner();
         txtPrecio = new javax.swing.JTextField();
         cboCategoria = new javax.swing.JComboBox<>();
-        jLabel8 = new javax.swing.JLabel();
         cbEstado = new javax.swing.JCheckBox();
+        lblTituloDatos = new javax.swing.JLabel();
         pnlAcciones = new javax.swing.JPanel();
         btnNuevo = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
@@ -101,38 +106,49 @@ public class GestionarProductos extends JInternalFrame {
         btnEliminar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(246, 236, 233));
+        setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         setClosable(true);
         setTitle("Mantenimiento Productos");
         setPreferredSize(new java.awt.Dimension(950, 580));
+        getContentPane().setLayout(new java.awt.BorderLayout(0, 12));
 
-        pnlSuperior.setBorder(javax.swing.BorderFactory.createTitledBorder("Buscar Productos"));
-        pnlSuperior.setPreferredSize(new java.awt.Dimension(0, 75));
+        pnlSuperior.setBackground(new java.awt.Color(255, 253, 252));
+        pnlSuperior.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)), javax.swing.BorderFactory.createEmptyBorder(10, 14, 10, 14)));
+        pnlSuperior.setPreferredSize(new java.awt.Dimension(0, 100));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(74, 53, 49));
         jLabel1.setText("Buscar");
-        jLabel1.setPreferredSize(new java.awt.Dimension(40, 24));
+        jLabel1.setPreferredSize(new java.awt.Dimension(55, 24));
 
         txtBuscar.setColumns(15);
-        txtBuscar.setPreferredSize(new java.awt.Dimension(179, 26));
+        txtBuscar.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)), javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 8)));
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtBuscarKeyReleased(evt);
             }
         });
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(74, 53, 49));
         jLabel2.setText("Categoria");
-        jLabel2.setPreferredSize(new java.awt.Dimension(55, 24));
+        jLabel2.setPreferredSize(new java.awt.Dimension(70, 24));
 
-        cboCategoriasFiltrar.setPreferredSize(new java.awt.Dimension(180, 26));
+        cboCategoriasFiltrar.setPreferredSize(new java.awt.Dimension(200, 26));
         cboCategoriasFiltrar.addActionListener(this::cboCategoriasFiltrarActionPerformed);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(74, 53, 49));
         jLabel9.setText("Estado");
         jLabel9.setPreferredSize(new java.awt.Dimension(50, 24));
 
-        cboEstado.setPreferredSize(new java.awt.Dimension(100, 26));
+        cboEstado.setPreferredSize(new java.awt.Dimension(150, 26));
         cboEstado.addActionListener(this::cboEstadoActionPerformed);
+
+        lblBuscarProducto.setFont(new java.awt.Font("Georgia", 1, 15)); // NOI18N
+        lblBuscarProducto.setForeground(new java.awt.Color(143, 86, 84));
+        lblBuscarProducto.setText("Buscar Productos");
 
         javax.swing.GroupLayout pnlSuperiorLayout = new javax.swing.GroupLayout(pnlSuperior);
         pnlSuperior.setLayout(pnlSuperiorLayout);
@@ -140,36 +156,43 @@ public class GestionarProductos extends JInternalFrame {
             pnlSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSuperiorLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(cboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(cboCategoriasFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(279, Short.MAX_VALUE))
+                .addGroup(pnlSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlSuperiorLayout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cboCategoriasFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblBuscarProducto))
+                .addContainerGap(364, Short.MAX_VALUE))
         );
         pnlSuperiorLayout.setVerticalGroup(
             pnlSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSuperiorLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addComponent(lblBuscarProducto)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlSuperiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cboCategoriasFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboCategoriasFiltrar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(14, Short.MAX_VALUE))
+                    .addComponent(cboEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(pnlSuperior, java.awt.BorderLayout.PAGE_START);
 
+        splitProductos.setBackground(new java.awt.Color(246, 236, 233));
+        splitProductos.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         splitProductos.setDividerLocation(0.8);
+        splitProductos.setDividerSize(14);
         splitProductos.setResizeWeight(0.8);
 
         tblProductos.setModel(new javax.swing.table.DefaultTableModel(
@@ -191,53 +214,69 @@ public class GestionarProductos extends JInternalFrame {
 
         splitProductos.setLeftComponent(jScrollPane1);
 
-        pnlFormulario.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos del Producto"));
+        pnlFormulario.setBackground(new java.awt.Color(255, 253, 252));
+        pnlFormulario.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)), javax.swing.BorderFactory.createEmptyBorder(12, 16, 12, 16)));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(74, 53, 49));
         jLabel3.setText("ID");
         jLabel3.setPreferredSize(new java.awt.Dimension(18, 24));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(74, 53, 49));
         jLabel4.setText("Nombre");
         jLabel4.setPreferredSize(new java.awt.Dimension(60, 24));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(74, 53, 49));
         jLabel5.setText("Precio Base (S/)");
         jLabel5.setPreferredSize(new java.awt.Dimension(110, 24));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(74, 53, 49));
         jLabel6.setText("Stock");
         jLabel6.setPreferredSize(new java.awt.Dimension(41, 24));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(74, 53, 49));
         jLabel7.setText("Categoria");
         jLabel7.setPreferredSize(new java.awt.Dimension(70, 24));
 
-        txtId.setEditable(false);
-        txtId.setColumns(6);
-        txtId.setPreferredSize(new java.awt.Dimension(80, 26));
-
-        txtNombre.setColumns(25);
-        txtNombre.setMinimumSize(new java.awt.Dimension(15, 26));
-        txtNombre.setPreferredSize(new java.awt.Dimension(289, 26));
-
-        spnStock.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
-        spnStock.setPreferredSize(new java.awt.Dimension(80, 26));
-
-        txtPrecio.setColumns(8);
-        txtPrecio.setMinimumSize(new java.awt.Dimension(15, 26));
-        txtPrecio.setPreferredSize(new java.awt.Dimension(102, 26));
-
-        cboCategoria.setMinimumSize(new java.awt.Dimension(180, 22));
-        cboCategoria.setPreferredSize(new java.awt.Dimension(180, 26));
-
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(74, 53, 49));
         jLabel8.setText("Estado");
         jLabel8.setPreferredSize(new java.awt.Dimension(50, 24));
 
+        txtId.setBackground(new java.awt.Color(246, 236, 233));
+        txtId.setColumns(6);
+        txtId.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)));
+
+        txtNombre.setColumns(25);
+        txtNombre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)));
+        txtNombre.setMinimumSize(new java.awt.Dimension(15, 26));
+
+        spnStock.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        spnStock.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)));
+        spnStock.setPreferredSize(new java.awt.Dimension(80, 26));
+
+        txtPrecio.setColumns(8);
+        txtPrecio.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)));
+        txtPrecio.setMinimumSize(new java.awt.Dimension(15, 26));
+
+        cboCategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)));
+        cboCategoria.setMinimumSize(new java.awt.Dimension(180, 22));
+        cboCategoria.setPreferredSize(new java.awt.Dimension(180, 26));
+
+        cbEstado.setBackground(new java.awt.Color(255, 253, 252));
         cbEstado.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        cbEstado.setForeground(new java.awt.Color(74, 53, 49));
         cbEstado.setText("Activo");
+        cbEstado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)));
         cbEstado.setPreferredSize(new java.awt.Dimension(70, 26));
+
+        lblTituloDatos.setFont(new java.awt.Font("Georgia", 1, 15)); // NOI18N
+        lblTituloDatos.setForeground(new java.awt.Color(143, 86, 84));
+        lblTituloDatos.setText("Datos del Producto");
 
         javax.swing.GroupLayout pnlFormularioLayout = new javax.swing.GroupLayout(pnlFormulario);
         pnlFormulario.setLayout(pnlFormularioLayout);
@@ -260,71 +299,78 @@ public class GestionarProductos extends JInternalFrame {
                     .addComponent(spnStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(113, Short.MAX_VALUE))
+            .addGroup(pnlFormularioLayout.createSequentialGroup()
+                .addComponent(lblTituloDatos)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         pnlFormularioLayout.setVerticalGroup(
             pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFormularioLayout.createSequentialGroup()
-                .addContainerGap()
+                .addComponent(lblTituloDatos)
+                .addGap(12, 12, 12)
                 .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spnStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spnStock, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(pnlFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(86, Short.MAX_VALUE))
+                    .addComponent(cbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         splitProductos.setRightComponent(pnlFormulario);
 
         getContentPane().add(splitProductos, java.awt.BorderLayout.CENTER);
 
+        pnlAcciones.setBackground(new java.awt.Color(255, 253, 252));
+        pnlAcciones.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)), javax.swing.BorderFactory.createEmptyBorder(6, 14, 6, 14)));
         pnlAcciones.setPreferredSize(new java.awt.Dimension(0, 50));
+        pnlAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 12, 0));
 
         btnNuevo.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnNuevo.setText("Nuevo");
-        btnNuevo.setPreferredSize(new java.awt.Dimension(120, 35));
+        btnNuevo.setPreferredSize(new java.awt.Dimension(125, 38));
         btnNuevo.addActionListener(this::btnNuevoActionPerformed);
         pnlAcciones.add(btnNuevo);
 
         btnGuardar.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnGuardar.setText("Guardar");
-        btnGuardar.setPreferredSize(new java.awt.Dimension(120, 35));
+        btnGuardar.setPreferredSize(new java.awt.Dimension(125, 38));
         btnGuardar.addActionListener(this::btnGuardarActionPerformed);
         pnlAcciones.add(btnGuardar);
 
         btnEditar.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnEditar.setText("Editar");
-        btnEditar.setPreferredSize(new java.awt.Dimension(120, 35));
+        btnEditar.setPreferredSize(new java.awt.Dimension(125, 38));
         btnEditar.addActionListener(this::btnEditarActionPerformed);
         pnlAcciones.add(btnEditar);
 
         btnEliminar.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnEliminar.setText("Eliminar");
-        btnEliminar.setPreferredSize(new java.awt.Dimension(120, 35));
+        btnEliminar.setPreferredSize(new java.awt.Dimension(125, 38));
         btnEliminar.addActionListener(this::btnEliminarActionPerformed);
         pnlAcciones.add(btnEliminar);
 
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btnCancelar.setText("Cancelar");
-        btnCancelar.setPreferredSize(new java.awt.Dimension(120, 35));
+        btnCancelar.setPreferredSize(new java.awt.Dimension(125, 38));
         btnCancelar.addActionListener(this::btnCancelarActionPerformed);
         pnlAcciones.add(btnCancelar);
 
@@ -507,6 +553,8 @@ public class GestionarProductos extends JInternalFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblBuscarProducto;
+    private javax.swing.JLabel lblTituloDatos;
     private javax.swing.JPanel pnlAcciones;
     private javax.swing.JPanel pnlFormulario;
     private javax.swing.JPanel pnlSuperior;
@@ -531,7 +579,7 @@ public class GestionarProductos extends JInternalFrame {
                 cbo.addItem(opcionTodas);
             }
 
-            List<Categoria> lista = categoriaService.listarTodas();
+            List<Categoria> lista = categoriaService.listarActivas();
 
             for (Categoria cat : lista) {
                 cbo.addItem(cat);
@@ -669,6 +717,27 @@ public class GestionarProductos extends JInternalFrame {
             }
         };
         tblProductos.setModel(modeloProductos);
+    }
+
+    private void aplicarDisenoProductos() {
+        ((javax.swing.JComponent) getContentPane()).setBorder(
+                javax.swing.BorderFactory.createEmptyBorder(12, 14, 12, 14)
+        );
+
+        EstiloBriale.estilizarTituloSeccion(lblTituloDatos, Feather.PACKAGE);
+        EstiloBriale.estilizarTituloSeccion(lblBuscarProducto, Feather.SEARCH);
+
+        EstiloBriale.estilizarTabla(tblProductos, jScrollPane1);
+
+        EstiloBriale.estilizarComboBox(cboCategoriasFiltrar);
+        EstiloBriale.estilizarComboBox(cboEstado);
+        EstiloBriale.estilizarComboBox(cboCategoria);
+
+        EstiloBriale.estilizarBotonPrimario(btnNuevo, Feather.PLUS_CIRCLE, 18);
+        EstiloBriale.estilizarBotonPrimario(btnGuardar, Feather.SAVE, 18);
+        EstiloBriale.estilizarBotonSecundario(btnEditar, Feather.EDIT_2, 18);
+        EstiloBriale.estilizarBotonBeige(btnEliminar, Feather.TRASH_2, 18);
+        EstiloBriale.estilizarBotonSecundario(btnCancelar, Feather.X_CIRCLE, 18);
     }
 
 }

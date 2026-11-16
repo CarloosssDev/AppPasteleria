@@ -41,6 +41,9 @@ public class Persona {
     @Column(nullable = false, length = 9)
     protected String telefono;
 
+    @Column(name = "estado", nullable = false)
+    protected boolean estado = true;
+
     public Persona() {
     }
 
@@ -96,4 +99,13 @@ public class Persona {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
 }

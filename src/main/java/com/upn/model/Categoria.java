@@ -31,6 +31,9 @@ public class Categoria {
     @Column(length = 255)
     private String descripcion;
 
+    @Column(name = "estado", nullable = false)
+    private boolean estado = true;
+
     // Relación Uno a Muchos: Una categoría tiene muchos productos
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductoPasteleria> productos = new ArrayList<>();
@@ -81,6 +84,14 @@ public class Categoria {
 
     public void setProductos(List<ProductoPasteleria> productos) {
         this.productos = productos;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 
     @Override

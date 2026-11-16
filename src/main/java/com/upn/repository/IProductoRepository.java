@@ -11,23 +11,24 @@ import java.util.List;
 @Repository
 public interface IProductoRepository extends JpaRepository<ProductoPasteleria, Long> {
 
-    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria")
+    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE p.categoria.estado = true")
     List<ProductoPasteleria> findAllWithCategoria();
 
-    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE p.estado = false")
+    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE p.estado = false AND p.categoria.estado = true")
     List<ProductoPasteleria> findAllInactivosWithCategoria();
 
-    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE p.estado = true")
+    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE p.estado = true AND p.categoria.estado = true")
     List<ProductoPasteleria> findAllActivosWithCategoria();
 
-    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE p.estado = true AND LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
+    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE p.estado = true AND p.categoria.estado = true AND LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
     List<ProductoPasteleria> findByNombreContainingIgnoreCaseWithCategoria(@Param("nombre") String nombre);
 
-    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE p.estado = true AND (:idCategoria = 0 OR p.categoria.id = :idCategoria)")
+    @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria WHERE p.estado = true AND p.categoria.estado = true AND (:idCategoria = 0L OR p.categoria.id = :idCategoria)")
     List<ProductoPasteleria> findByCategoriaIdWithCategoria(@Param("idCategoria") Long idCategoria);
 
     @Query("SELECT p FROM ProductoPasteleria p JOIN FETCH p.categoria c "
-            + "WHERE (:idCategoria = 0 OR c.id = :idCategoria) "
+            + "WHERE c.estado = true "
+            + "AND (:idCategoria = 0L OR c.id = :idCategoria) "
             + "AND (:estado IS NULL OR p.estado = :estado) "
             + "AND (:nombre = '' OR LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%')))")
     List<ProductoPasteleria> filtrarProductosCombinados(

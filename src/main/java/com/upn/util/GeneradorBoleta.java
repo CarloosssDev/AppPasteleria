@@ -29,9 +29,9 @@ public class GeneradorBoleta {
     public static String generarHtmlBoleta(Venta venta, Cliente cliente, Empleado empleado, DefaultTableModel modeloCarrito) {
         List<ItemBoleta> items = new ArrayList<>();
         for (int i = 0; i < modeloCarrito.getRowCount(); i++) {
+            String cant = modeloCarrito.getValueAt(i, 0).toString();
             String desc = modeloCarrito.getValueAt(i, 1).toString();
-            String cant = modeloCarrito.getValueAt(i, 2).toString();
-            String sub = modeloCarrito.getValueAt(i, 4).toString();
+            String sub = modeloCarrito.getValueAt(i, 3).toString();
             items.add(new ItemBoleta(cant, desc, sub));
         }
         return construirHtml(venta, cliente, empleado, items);

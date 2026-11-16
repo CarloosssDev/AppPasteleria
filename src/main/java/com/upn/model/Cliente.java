@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Cliente")
+@Table(name = "Clientes")
 public class Cliente extends Persona {
 
     @Size(max = 150, message = "La dirección no puede exceder los 150 caracteres")

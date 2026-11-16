@@ -9,6 +9,6 @@ package com.upn.enums;
  * @author user
  */
 public enum Rol {
-    ADMIN,
-    EMPLEADO
+    Administrador,
+    Cajero
 }

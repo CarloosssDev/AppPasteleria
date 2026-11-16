@@ -29,12 +29,18 @@ public class ProductoService {
         return productoRepository.findAllInactivosWithCategoria();
     }
 
+    @Transactional(readOnly = true)
     public List<ProductoPasteleria> listarPorCategoria(Long idCategoria) {
-        return productoRepository.findByCategoriaIdWithCategoria(idCategoria);
+        return productoRepository.findByCategoriaIdWithCategoria(idCategoria != null ? idCategoria : 0L);
     }
 
+    @Transactional(readOnly = true)
     public List<ProductoPasteleria> filtrarProductosCombinados(Long idCategoria, Boolean estado, String nombre) {
-        return productoRepository.filtrarProductosCombinados(idCategoria, estado, nombre != null ? nombre.trim() : "");
+        return productoRepository.filtrarProductosCombinados(
+                idCategoria != null ? idCategoria : 0L,
+                estado,
+                nombre != null ? nombre.trim() : ""
+        );
     }
 
     public List<ProductoPasteleria> buscarPorNombre(String nombre) {

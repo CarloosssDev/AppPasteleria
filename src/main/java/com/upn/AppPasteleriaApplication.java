@@ -1,6 +1,6 @@
 package com.upn;
 
-import com.upn.frame.Login_Pasteleria;
+import com.upn.frame.Login;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -16,7 +16,7 @@ public class AppPasteleriaApplication {
                 .run(args);
 
         java.awt.EventQueue.invokeLater(() -> {
-            Login_Pasteleria login = context.getBean(Login_Pasteleria.class);
+            Login login = context.getBean(Login.class);
             login.setVisible(true);
         });
     }

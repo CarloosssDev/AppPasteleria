@@ -5,8 +5,6 @@
 package com.upn.frame;
 
 import com.toedter.calendar.JTextFieldDateEditor;
-import com.upn.model.DetalleVenta;
-import com.upn.model.ProductoPasteleria;
 import com.upn.model.Venta;
 import com.upn.service.VentaService;
 import com.upn.util.GeneradorBoleta;
@@ -21,6 +19,10 @@ import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import com.upn.util.EstiloBriale;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import org.kordamp.ikonli.feather.Feather;
 
 /**
  *
@@ -43,6 +45,7 @@ public class ConsultarVentas extends javax.swing.JInternalFrame {
     public ConsultarVentas() {
         initComponents();
         configurarTablaVentas();
+        aplicarDisenoConsulta();
     }
 
     @PostConstruct
@@ -279,37 +282,43 @@ public class ConsultarVentas extends javax.swing.JInternalFrame {
 
         jInternalFrame2.getContentPane().add(jInternalFrame3, java.awt.BorderLayout.LINE_END);
 
+        setBackground(new java.awt.Color(246, 236, 233));
+        setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         setClosable(true);
         setTitle("Reporte y Consulta de Ventas");
+        getContentPane().setLayout(new java.awt.BorderLayout(0, 12));
 
-        pnlSuperior.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtrar Ventas por Fecha"));
+        pnlSuperior.setBackground(new java.awt.Color(255, 253, 252));
+        pnlSuperior.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)), javax.swing.BorderFactory.createEmptyBorder(10, 14, 10, 14)));
         pnlSuperior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 15, 10));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(74, 53, 49));
         jLabel1.setText("Fecha Inicio:");
         pnlSuperior.add(jLabel1);
 
         dtcFechaInicio.setDateFormatString("dd/MM/yyyy");
-        dtcFechaInicio.setPreferredSize(new java.awt.Dimension(140, 28));
+        dtcFechaInicio.setPreferredSize(new java.awt.Dimension(145, 32));
         pnlSuperior.add(dtcFechaInicio);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(74, 53, 49));
         jLabel2.setText("Fecha Fin:");
         pnlSuperior.add(jLabel2);
 
         dtcFechaFin.setDateFormatString("dd/MM/yyyy");
-        dtcFechaFin.setPreferredSize(new java.awt.Dimension(140, 28));
+        dtcFechaFin.setPreferredSize(new java.awt.Dimension(145, 32));
         pnlSuperior.add(dtcFechaFin);
 
         btnConsultar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnConsultar.setText("Consultar");
-        btnConsultar.setPreferredSize(new java.awt.Dimension(120, 30));
+        btnConsultar.setPreferredSize(new java.awt.Dimension(135, 34));
         btnConsultar.addActionListener(this::btnConsultarActionPerformed);
         pnlSuperior.add(btnConsultar);
 
         btnLimpiarFiltro.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnLimpiarFiltro.setText("Mostrar Todas");
-        btnLimpiarFiltro.setPreferredSize(new java.awt.Dimension(140, 30));
+        btnLimpiarFiltro.setPreferredSize(new java.awt.Dimension(160, 34));
         btnLimpiarFiltro.addActionListener(this::btnLimpiarFiltroActionPerformed);
         pnlSuperior.add(btnLimpiarFiltro);
 
@@ -331,6 +340,10 @@ public class ConsultarVentas extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        tblVentas.setGridColor(new java.awt.Color(246, 236, 233));
+        tblVentas.setRowHeight(28);
+        tblVentas.setSelectionBackground(new java.awt.Color(234, 224, 221));
+        tblVentas.setSelectionForeground(new java.awt.Color(74, 53, 49));
         tblVentas.getTableHeader().setResizingAllowed(false);
         tblVentas.getTableHeader().setReorderingAllowed(false);
         tblVentas.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -351,19 +364,23 @@ public class ConsultarVentas extends javax.swing.JInternalFrame {
 
         getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        pnlInferior.setBackground(new java.awt.Color(255, 253, 252));
+        pnlInferior.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(232, 218, 214)), javax.swing.BorderFactory.createEmptyBorder(10, 16, 10, 16)));
         pnlInferior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 30, 10));
 
         btnVerDetalle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnVerDetalle.setText("Ver Comprobante");
+        btnVerDetalle.setPreferredSize(new java.awt.Dimension(170, 38));
         btnVerDetalle.addActionListener(this::btnVerDetalleActionPerformed);
         pnlInferior.add(btnVerDetalle);
 
         lblResumen.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblResumen.setForeground(new java.awt.Color(74, 53, 49));
         lblResumen.setText("Total Recaudado en el Período:");
         pnlInferior.add(lblResumen);
 
-        lblTotalAcumulado.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        lblTotalAcumulado.setForeground(java.awt.Color.blue);
+        lblTotalAcumulado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblTotalAcumulado.setForeground(new java.awt.Color(143, 86, 84));
         lblTotalAcumulado.setText("S/ 0.00");
         pnlInferior.add(lblTotalAcumulado);
 
@@ -524,5 +541,20 @@ public class ConsultarVentas extends javax.swing.JInternalFrame {
 
             JOptionPane.showMessageDialog(this, scroll, "Boleta de Venta N° " + venta.getId(), JOptionPane.PLAIN_MESSAGE);
         }
+    }
+
+    private void aplicarDisenoConsulta() {
+        ((JComponent) getContentPane()).setBorder(
+                BorderFactory.createEmptyBorder(12, 14, 12, 14)
+        );
+
+        EstiloBriale.estilizarBotonPrimario(btnConsultar, Feather.SEARCH, 18);
+        EstiloBriale.estilizarBotonSecundario(btnLimpiarFiltro, Feather.LIST, 18);
+        EstiloBriale.estilizarBotonPrimario(btnVerDetalle, Feather.FILE_TEXT, 20);
+
+        EstiloBriale.estilizarDateChooser(dtcFechaInicio);
+        EstiloBriale.estilizarDateChooser(dtcFechaFin);
+
+        EstiloBriale.estilizarTabla(tblVentas, jScrollPane1);
     }
 }
