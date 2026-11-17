@@ -139,4 +139,4 @@ mvn test
 
 ## 📄 Licencia
 
-Este proyecto no incluye actualmente una licencia de distribución.
+Este proyecto está bajo la licencia [MIT](LICENSE).
