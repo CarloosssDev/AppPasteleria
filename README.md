@@ -36,6 +36,7 @@ AppPasteleria/
 │   │       └── application.properties
 │   └── test/                   # Pruebas de la aplicación
 ├── pom.xml                    # Dependencias y configuración Maven
+├── docs/screenshots/          # Capturas de la aplicación
 └── nbactions.xml              # Configuración de ejecución de NetBeans
 ```
 
@@ -129,6 +130,30 @@ Para ejecutar las pruebas disponibles:
 ```bash
 mvn test
 ```
+
+## 🖼️ Capturas de pantalla
+
+Las capturas de la aplicación se encuentran en [`docs/screenshots/`](docs/screenshots/):
+
+### Inicio de sesión
+
+![Inicio de sesión](docs/screenshots/login.png)
+
+### Dashboard
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Gestión de categorías
+
+![Gestión de categorías](docs/screenshots/categorias.png)
+
+### Gestión de productos
+
+![Gestión de productos](docs/screenshots/productos.png)
+
+### Registro de ventas
+
+![Registro de ventas](docs/screenshots/ventas.png)
 
 ## 📌 Notas de desarrollo
 
