@@ -406,11 +406,14 @@ public class Dashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCategoriasActionPerformed
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
-        // TODO add your handling code here:
+        abrirInternalFrame(GestionarClientes.class, true);
+        actualizarMenuActivo(btnClientes);
     }//GEN-LAST:event_btnClientesActionPerformed
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
-        // TODO add your handling code here:
+        GestionarUsuarios frameUsuarios = abrirInternalFrame(GestionarUsuarios.class, true);
+        frameUsuarios.setEmpleadoLogueado(empleadoLogueado);
+        actualizarMenuActivo(btnUsuarios);
     }//GEN-LAST:event_btnUsuariosActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
@@ -424,16 +427,21 @@ public class Dashboard extends javax.swing.JFrame {
 
         if (confirmacion == JOptionPane.YES_OPTION) {
             this.empleadoLogueado = null;
+            this.frameVenta = null;
             btnUsuarios.setVisible(false);
 
-            dpPanel.removeAll();
-            dpPanel.revalidate();
-            dpPanel.repaint();
+            for (JInternalFrame frame : dpPanel.getAllFrames()) {
+                frame.dispose();
+            }
 
-            this.setVisible(false);
+            pnlBienvenida.setVisible(true);
+            actualizarMenuActivo(btnInicio);
+
             Login loginFrame = context.getBean(Login.class);
             loginFrame.limpiarFormulario();
             loginFrame.setVisible(true);
+
+            this.setVisible(false);
         }
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
 

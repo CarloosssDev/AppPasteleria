@@ -278,9 +278,10 @@ public class Login extends javax.swing.JFrame {
 
             Dashboard dash = context.getBean(Dashboard.class);
             dash.setEmpleadoLogueado(empleado);
+            dash.setExtendedState(MAXIMIZED_BOTH);
             dash.setVisible(true);
 
-            this.dispose();
+            this.setVisible(false);
 
         } else {
             JOptionPane.showMessageDialog(this, "Contraseña incorrecta.", "Acceso Denegado", JOptionPane.ERROR_MESSAGE);
@@ -319,17 +320,15 @@ public class Login extends javax.swing.JFrame {
 
     private void txtPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-                String password = new String(txtPassword.getPassword()).trim();
+            String password = new String(txtPassword.getPassword()).trim();
 
-                if (!password.isEmpty()) {
-                    btnIngresarActionPerformed(null);
-                } else {
-                    JOptionPane.showMessageDialog(this,
-                            "Por favor, ingresa tu contraseña.",
-                            "Advertencia",
-                            JOptionPane.WARNING_MESSAGE);
-                }
+            if (!password.isEmpty()) {
+                btnIngresarActionPerformed(null);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Por favor, ingresa tu contraseña.",
+                        "Advertencia",
+                        JOptionPane.WARNING_MESSAGE);
             }
         }
     }//GEN-LAST:event_txtPasswordKeyPressed
